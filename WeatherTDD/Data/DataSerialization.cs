@@ -67,7 +67,7 @@ namespace WeatherAPI.Data.DataSerialization
             public double lat { get; set; }
             public double lon { get; set; }
         }
-        public static int cod { get; set; }
+        public int cod { get; set; }
         public double message { get; set; }
         public int cnt { get; set; }
         public IList<Forecast> list { get; set; }
@@ -89,7 +89,7 @@ namespace WeatherAPI.Data.DataSerialization
             WeatherMainJson = JObject.Parse(WeatherMainCallManager.GetWeatherForcast(Parameters));
         }
     }
-    class OpenWeatherMapForecastDTO
+    public class OpenWeatherMapForecastDTO
     {
         public OpenWeatherAPIRoot openWeatherMapForecastRoot { get; set; }
         public void DeserializeForecast(String OpenWeatherMapForecastResponse)
@@ -97,7 +97,7 @@ namespace WeatherAPI.Data.DataSerialization
             openWeatherMapForecastRoot = JsonConvert.DeserializeObject<OpenWeatherAPIRoot>(OpenWeatherMapForecastResponse);
         }
     }
-    class OpenWeatherAPIRoot
+    public class OpenWeatherAPIRoot
     {
         public WeatherAPIRoot openweatherAPIRoot { get; set; }
         public void DeserializeForecast(String OpenWeatherApiResponse)

@@ -16,12 +16,12 @@ namespace WeatherAPI.Test
         [Test]
         public void WebCallSuccessCheck()
         {
-            Assert.AreEqual(200, Data.DataSerialization.WeatherAPIRoot.cod);
+            Assert.AreEqual(200, openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.cod);
         }
         [Test]
         public void TestWeatherTemp()
         {
-            Assert.AreEqual(200, WeatherAPIRoot.cod);
+            Assert.AreEqual(200, openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.city);
         }
         [Test]
         public void TestWeatherTemp_Min()

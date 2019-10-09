@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ConsoleMain\Program.cs" />
     <Compile Include="Data\DataSerialization.cs" />
+    <Compile Include="Data\OpenWeatherAPIForecast.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\TestMain.cs" />
   </ItemGroup>
