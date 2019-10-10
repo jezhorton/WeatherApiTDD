@@ -120,6 +120,7 @@ namespace WeatherAPI.Test
         {
             Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0]);
         }
+        //Checking all of the different null values in all of the string values
         [Test]
         public void TestWeatherMainNotNull()
         {
@@ -134,6 +135,27 @@ namespace WeatherAPI.Test
         public void TestWeatherIconNotNull()
         {
             Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[3]);
+        }
+    }
+    [TestFixture]
+    public class TestSmallMethods
+    {
+        OpenWeatherMapForecastService openWeatherAPI = new OpenWeatherMapForecastService();
+        //Constructor for the tests
+        public TestSmallMethods()
+        {
+            openWeatherAPI.Parameters = "q=London,gb";
+        }
+        [Test]
+        public void TestClouds()
+        {
+            double clouds = openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].clouds.all;
+            Assert.IsTrue(clouds >= 0 && clouds <= 100);
+        }
+        [Test]
+        public void TestWind()
+        {
+
         }
     }
 }

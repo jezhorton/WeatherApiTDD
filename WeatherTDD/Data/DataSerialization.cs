@@ -77,7 +77,7 @@ namespace WeatherAPI.Data.DataSerialization
     class OpenWeatherMapForecastService
     {
         // We need DTO
-        public OpenWeatherAPIRoot openWeatherMapForecastDTO = new OpenWeatherAPIRoot();
+        public OpenWeatherAPIRoot openWeatherAPIDTO= new OpenWeatherAPIRoot();
         // We need Call Manager
         public WeatherMain WeatherMainCallManager = new WeatherMain();
         public String Parameters { get; set; }
@@ -85,7 +85,7 @@ namespace WeatherAPI.Data.DataSerialization
         public JObject WeatherMainJson;
         public OpenWeatherMapForecastService()
         {
-            openWeatherMapForecastDTO.DeserializeForecast(WeatherMainCallManager.GetWeatherForcast(Parameters));
+            openWeatherAPIDTO.DeserializeForecast(WeatherMainCallManager.GetWeatherForcast(Parameters));
             WeatherMainJson = JObject.Parse(WeatherMainCallManager.GetWeatherForcast(Parameters));
         }
     }
