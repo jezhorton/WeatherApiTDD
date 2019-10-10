@@ -8,6 +8,7 @@ namespace WeatherAPI.Test
     public class MainTest
     {
         OpenWeatherMapForecastService openWeatherMapForecastService = new OpenWeatherMapForecastService();
+        //Constructor for the tests
         public MainTest()
         {
             openWeatherMapForecastService.Parameters = "q=London,gb";
@@ -18,15 +19,35 @@ namespace WeatherAPI.Test
         {
             Assert.AreEqual(200, openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.cod);
         }
+        // Check for message parameter
         [Test]
-        public void TestWeatherTemp()
+        public void MessageCheck()
         {
-            Assert.AreEqual(200, openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.city);
+            Assert.Greater(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.message, 0);
+        }
+        // Number of lines returned by this API call, check for return
+        [Test]
+        public void CountCheck()
+        {
+            Assert.Greater(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.cnt, 0);
+        }
+        // Check for the date time format rather than the specific date
+        [Test]
+        public void DtCheck()
+        {
+            // Convert unix to DateTime
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            DateTime dtDate = origin.AddSeconds(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].dt);
+            // Check DateTime string is valid
+            DateTime parsedDate;
+            bool isValid = false;
+            isValid = DateTime.TryParse(dtDate.ToString(), out parsedDate);
+            Assert.IsTrue(isValid);
         }
         [Test]
         public void TestWeatherTemp_Min()
         {
-            Assert.Pass();
+            Assert.That(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp, Is.EqualTo(273.15).Within(200));
         }
         [Test]
         public void TestWeatherTemp_Max()
