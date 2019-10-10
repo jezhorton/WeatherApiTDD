@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace WeatherAPI.Data.DataSerialization
 {
@@ -50,6 +52,12 @@ namespace WeatherAPI.Data.DataSerialization
         public class Sys
         {
             public string pod { get; set; }
+        }
+        []
+        public class Rain
+        {
+            [DataMember(nameof = "3h")]
+            public double threeh { get; set; } 
         }
         public class City
         {
