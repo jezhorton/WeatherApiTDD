@@ -44,10 +44,17 @@ namespace WeatherAPI.Test
             isValid = DateTime.TryParse(dtDate.ToString(), out parsedDate);
             Assert.IsTrue(isValid);
         }
+        //Testing exact weather temp
         [Test]
         public void TestWeatherTemp_Min()
         {
             Assert.That(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp, Is.EqualTo(273.15).Within(200));
+        }
+        //Testing the minimum is less than the maximum
+        [Test]
+        public void TestWeatherMinByMax()
+        {
+            Assert.That(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp_min, Is.LessThan(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp_max).Within(200));
         }
         [Test]
         public void TestWeatherTemp_Max()
