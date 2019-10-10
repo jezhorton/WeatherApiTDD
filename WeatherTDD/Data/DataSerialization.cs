@@ -18,6 +18,7 @@ namespace WeatherAPI.Data.DataSerialization
             public Main main { get; set; }
             public IList<Weather> weather { get; set; }
             public Clouds clouds { get; set; }
+            public Rain rain { get; set; }
             public Wind wind { get; set; }
             public Sys sys { get; set; }
             public string dt_txt { get; set; }
@@ -53,10 +54,10 @@ namespace WeatherAPI.Data.DataSerialization
         {
             public string pod { get; set; }
         }
-        [Data]
+        [DataContract]
         public class Rain
         {
-            [DataMember(nameof = "3h")]
+            [DataMember(Name = "3h")]
             public double threeh { get; set; } 
         }
         public class City
@@ -82,7 +83,7 @@ namespace WeatherAPI.Data.DataSerialization
         public City city { get; set; }
     }
 
-    class OpenWeatherMapForecastService
+    public class OpenWeatherMapForecastService
     {
         // We need DTO
         public OpenWeatherAPIRoot openWeatherAPIDTO= new OpenWeatherAPIRoot();

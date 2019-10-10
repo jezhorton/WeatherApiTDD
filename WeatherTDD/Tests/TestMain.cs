@@ -9,10 +9,7 @@ namespace WeatherAPI.Test
     {
         OpenWeatherMapForecastService openWeatherAPI = new OpenWeatherMapForecastService();
         //Constructor for the tests
-        public MainTest()
-        {
-            openWeatherAPI.Parameters = "q=London,gb";
-        }
+
         // Check for successful web call 200
         [Test]
         public void WebCallSuccessCheck()
@@ -112,7 +109,7 @@ namespace WeatherAPI.Test
                 600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622,
                 701, 711, 721, 731, 741, 751, 761, 762, 771, 781,
                 800, 801, 802, 803, 804 };
-            Assert.Contains(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0], (test));
+            Assert.Contains(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0].id, test);
         }
         // A test to check there is a weather code
         [Test]
@@ -124,17 +121,17 @@ namespace WeatherAPI.Test
         [Test]
         public void TestWeatherMainNotNull()
         {
-            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[1]);
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0].id);
         }
         [Test]
         public void TestWeatherDescNotNull()
         {
-            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[2]);
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0].description);
         }
         [Test]
         public void TestWeatherIconNotNull()
         {
-            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[3]);
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0].icon);
         }
     }
     [TestFixture]
@@ -164,20 +161,6 @@ namespace WeatherAPI.Test
             Assert.IsTrue(windSpeedValue >= 0 && windSpeedValue <= 360);
         }
         [Test]
-        public void TestRain()
-        {
-            bool raining = false;
-            if (openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].rain.threeh >= 0)
-            {
-                raining = true;
-                Assert.IsTrue(raining);
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-        [Test]
         public void TestPod()
         {
             Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].sys.pod);
@@ -185,7 +168,7 @@ namespace WeatherAPI.Test
         [Test]
         public void TestDateTimeSerial()
         {
-            Assert.AreEqual(19, openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].dt_txt);
+            Assert.AreEqual(19, openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].dt_txt.Length);
         }
     }
 }
