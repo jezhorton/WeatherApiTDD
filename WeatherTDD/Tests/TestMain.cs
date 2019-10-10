@@ -7,29 +7,29 @@ namespace WeatherAPI.Test
     [TestFixture]
     public class MainTest
     {
-        OpenWeatherMapForecastService openWeatherMapForecastService = new OpenWeatherMapForecastService();
+        OpenWeatherMapForecastService openWeatherAPI = new OpenWeatherMapForecastService();
         //Constructor for the tests
         public MainTest()
         {
-            openWeatherMapForecastService.Parameters = "q=London,gb";
+            openWeatherAPI.Parameters = "q=London,gb";
         }
         // Check for successful web call 200
         [Test]
         public void WebCallSuccessCheck()
         {
-            Assert.AreEqual(200, openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.cod);
+            Assert.AreEqual(200, openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.cod);
         }
         // Check for message parameter
         [Test]
         public void MessageCheck()
         {
-            Assert.Greater(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.message, 0);
+            Assert.Greater(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.message, 0);
         }
         // Number of lines returned by this API call, check for return
         [Test]
         public void CountCheck()
         {
-            Assert.Greater(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.cnt, 0);
+            Assert.Greater(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.cnt, 0);
         }
         // Check for the date time format rather than the specific date
         [Test]
@@ -37,61 +37,103 @@ namespace WeatherAPI.Test
         {
             // Convert unix to DateTime
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            DateTime dtDate = origin.AddSeconds(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].dt);
+            DateTime dtDate = origin.AddSeconds(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].dt);
             // Check DateTime string is valid
             DateTime parsedDate;
             bool isValid = false;
             isValid = DateTime.TryParse(dtDate.ToString(), out parsedDate);
             Assert.IsTrue(isValid);
         }
-        //Testing exact weather temp
+        //Testing exact weather temp (within 100)
         [Test]
-        public void TestWeatherTemp_Min()
+        public void TestWeatherTemp()
         {
-            Assert.That(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp, Is.EqualTo(273.15).Within(200));
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.temp, Is.EqualTo(273.15).Within(100));
         }
         //Testing the minimum is less than the maximum
         [Test]
         public void TestWeatherMinByMax()
         {
-            Assert.That(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp_min, Is.LessThan(openWeatherMapForecastService.openWeatherMapForecastDTO.openweatherAPIRoot.list[0].main.temp_max).Within(200));
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.temp_min, Is.LessThan(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.temp_max));
         }
+        // Checking the maximum is above the minimum
         [Test]
         public void TestWeatherTemp_Max()
         {
-            Assert.Pass();
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.temp_max, Is.AtLeast(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.temp_min));
         }
+        // Checking the pressure within 150 points of 1000 (the current forcasted pressure)
         [Test]
         public void TestWeatherPressure()
         {
-            Assert.Pass();
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.pressure, Is.EqualTo(1000).Within(150));
 
         }
         [Test]
         public void TestWeatherSea_Level()
         {
-            Assert.Pass();
-
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.sea_level, Is.EqualTo(1000).Within(150));
         }
         [Test]
         public void TestWeatherGrnd_Level()
         {
-            Assert.Pass();
-
-
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.grnd_level, Is.EqualTo(1000).Within(150));
         }
+        //Checking the percentage of humidity is between 0 and 100
         [Test]
         public void TestWeatherHumidity()
         {
-            Assert.Pass();
-
-
+            double humidity = openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.humidity;
+            Assert.IsTrue(humidity >= 0 && humidity <= 100);
         }
         [Test]
         public void TestWeatherTemp_Kf()
         {
-            Assert.Pass();
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].main.temp_kf);
         }
-
+    }
+    [TestFixture]
+    public class WeatherArrayTest
+    {
+        OpenWeatherMapForecastService openWeatherAPI = new OpenWeatherMapForecastService();
+        //Constructor for the tests
+        public WeatherArrayTest()
+        {
+            openWeatherAPI.Parameters = "q=London,gb";
+        }
+        // A test to check the weather code is one of the pre defined ones in the api
+        [Test]
+        public void TestWeatherCode()
+        {
+            int[] test = {                 // The weather codes gathered from the api documentation
+                200, 201, 202, 210, 211, 212, 221, 230, 231, 232,
+                300, 301, 302, 310, 311, 312, 313, 314, 321,
+                500, 501, 502, 503, 504, 511, 520, 521, 521, 522, 531,
+                600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622,
+                701, 711, 721, 731, 741, 751, 761, 762, 771, 781,
+                800, 801, 802, 803, 804 };
+            Assert.Contains(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0], (test));
+        }
+        // A test to check there is a weather code
+        [Test]
+        public void TestWeatherCodeNotNull()
+        {
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[0]);
+        }
+        [Test]
+        public void TestWeatherMainNotNull()
+        {
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[1]);
+        }
+        [Test]
+        public void TestWeatherDescNotNull()
+        {
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[2]);
+        }
+        [Test]
+        public void TestWeatherIconNotNull()
+        {
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].weather[3]);
+        }
     }
 }
