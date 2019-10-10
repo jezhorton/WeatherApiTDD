@@ -153,9 +153,39 @@ namespace WeatherAPI.Test
             Assert.IsTrue(clouds >= 0 && clouds <= 100);
         }
         [Test]
-        public void TestWind()
+        public void TestWindSpeed()
         {
-
+            Assert.That(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].wind.speed, Is.EqualTo(5).Within(5));
+        }
+        [Test]
+        public void TestWindDegree()
+        {
+            double windSpeedValue = openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].wind.deg;
+            Assert.IsTrue(windSpeedValue >= 0 && windSpeedValue <= 360);
+        }
+        [Test]
+        public void TestRain()
+        {
+            bool raining = false;
+            if (openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].rain.threeh >= 0)
+            {
+                raining = true;
+                Assert.IsTrue(raining);
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+        [Test]
+        public void TestPod()
+        {
+            Assert.NotNull(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].sys.pod);
+        }
+        [Test]
+        public void TestDateTimeSerial()
+        {
+            Assert.AreEqual(19, openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].dt_txt);
         }
     }
 }
