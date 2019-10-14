@@ -168,7 +168,21 @@ namespace WeatherAPI.Test
         [Test]
         public void TestDateTimeSerial()
         {
+
             Assert.AreEqual(19, openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].dt_txt.Length);
+        }
+        // Made this an if statement as if there is no rain the API returns no key for rain so the key would be null, this is a check if the key is null
+        [Test]
+        public void TestingRain()
+        {
+            if (openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].rain.threeh != null)
+            {
+                Assert.Positive(openWeatherAPI.openWeatherAPIDTO.openweatherAPIRoot.list[0].rain.threeh);
+            }
+            else
+            {
+                Assert.Pass();
+            }
         }
     }
 }
